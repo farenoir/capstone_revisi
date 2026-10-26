@@ -213,7 +213,7 @@ export const InputBarangMasukPage: React.FC = () => {
                 Daftar Barang Masuk (Multi-Item)
               </h2>
               <p className="text-xs text-slate-500">
-                Tambahkan satu atau lebih item barang dalam satu dokumen faktur.
+                Tambahkan satu atau lebih item barang yang diterima ke gudang ATK.
               </p>
             </div>
             <button
@@ -272,11 +272,11 @@ export const InputBarangMasukPage: React.FC = () => {
 
                   <div className="flex-1 w-full">
                     <label className="block text-[11px] font-medium text-slate-500 mb-1">
-                      Keterangan / Faktur
+                      Keterangan (Opsional)
                     </label>
                     <input
                       type="text"
-                      placeholder="Contoh: Faktur #INV-001"
+                      placeholder="Contoh: Pengadaan rutin bulanan / Drop barang"
                       value={row.keterangan}
                       onChange={(e) => updateRow(idx, "keterangan", e.target.value)}
                       className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
