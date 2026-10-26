@@ -12,6 +12,7 @@ import {
   ArrowRight,
   TrendingUp,
   Calendar,
+  Home,
 } from "lucide-react";
 import { useAuthStore } from "../../store/useAuthStore";
 
@@ -71,29 +72,48 @@ export const DashboardPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
+          <div className="flex items-center gap-2 mb-1.5">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+            >
+              <Home className="h-3.5 w-3.5" />
+              <span>Kembali ke Halaman Depan</span>
+            </Link>
+          </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Dashboard Inventaris</h1>
           <p className="text-sm text-slate-500">
             Ringkasan posisi stok, mutasi bulan berjalan, dan peringatan batas minimum.
           </p>
         </div>
-        {isAdmin() && (
-          <div className="flex items-center gap-2">
-            <Link
-              to="/barang-masuk/baru"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-emerald-700 transition-colors"
-            >
-              <ArrowDownToLine className="h-4 w-4" />
-              <span>Input Masuk</span>
-            </Link>
-            <Link
-              to="/barang-keluar/baru"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-red-700 transition-colors"
-            >
-              <ArrowUpFromLine className="h-4 w-4" />
-              <span>Input Keluar</span>
-            </Link>
-          </div>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            to="/"
+            title="Kembali ke Halaman Depan Sistem"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition-colors shadow-xs"
+          >
+            <Home className="h-4 w-4 text-indigo-600" />
+            <span>Halaman Depan</span>
+          </Link>
+          {isAdmin() && (
+            <>
+              <Link
+                to="/barang-masuk/baru"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-emerald-700 transition-colors"
+              >
+                <ArrowDownToLine className="h-4 w-4" />
+                <span>Input Masuk</span>
+              </Link>
+              <Link
+                to="/barang-keluar/baru"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-red-700 transition-colors"
+              >
+                <ArrowUpFromLine className="h-4 w-4" />
+                <span>Input Keluar</span>
+              </Link>
+            </>
+          )}
+        </div>
       </div>
 
       {/* KPI Cards */}

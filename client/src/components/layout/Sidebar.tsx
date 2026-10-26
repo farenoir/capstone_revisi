@@ -11,6 +11,7 @@ import {
   FileSpreadsheet,
   X,
   Boxes,
+  Home,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -20,6 +21,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navItems = [
+    { label: "Halaman Depan", to: "/", icon: Home },
     { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
     { label: "Data Barang", to: "/barang", icon: Package },
     { label: "Kategori", to: "/kategori", icon: FolderTree },

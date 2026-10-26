@@ -37,7 +37,7 @@ export const LoginPage: React.FC = () => {
 
       const { token, user } = response.data.data;
       login(token, user);
-      navigate("/dashboard");
+      navigate("/");
     } catch (err: any) {
       if (err.response?.data?.error?.message) {
         setErrorMsg(err.response.data.error.message);
