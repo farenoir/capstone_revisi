@@ -123,6 +123,19 @@ cd client && npm run build
 cd ../server && npm run build
 ```
 
+### Deployment Kontainer (Docker Compose)
+
+Untuk menjalankan seluruh stack (MySQL 8.0, Backend API, Nginx Web) dalam lingkungan kontainer terisolasi:
+
+```bash
+# 1. Pastikan docker-compose.yml dan nginx.conf tersedia di root repositori
+# 2. Jalankan seluruh layanan
+docker compose up -d --build
+
+# 3. Akses antarmuka di peramban web
+http://localhost
+```
+
 ---
 
 ## 6. Daftar Endpoint RESTful API
