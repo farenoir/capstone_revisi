@@ -1,0 +1,23 @@
+# RancangAI local repo binding
+.rancangai/
+
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment Variables & Secrets
+.env
+server/.env
+client/.env
+
+# Build outputs
+dist/
+client/dist/
+server/dist/
+
+# Scratch & logs
+scratch/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

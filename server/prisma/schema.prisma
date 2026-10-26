@@ -1,0 +1,116 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  admin
+  pimpinan
+}
+
+model User {
+  id_user       Int            @id @default(autoincrement())
+  nama          String         @db.VarChar(100)
+  username      String         @unique @db.VarChar(50)
+  password      String         @db.VarChar(255)
+  role          Role           @default(admin)
+  created_at    DateTime       @default(now())
+  updated_at    DateTime       @updatedAt
+  barang_masuk  BarangMasuk[]
+  barang_keluar BarangKeluar[]
+
+  @@map("users")
+}
+
+model Kategori {
+  id_kategori   Int      @id @default(autoincrement())
+  nama_kategori String   @unique @db.VarChar(100)
+  created_at    DateTime @default(now())
+  barang        Barang[]
+
+  @@map("kategori")
+}
+
+model Supplier {
+  id_supplier   Int           @id @default(autoincrement())
+  nama_supplier String        @db.VarChar(150)
+  alamat        String?       @db.Text
+  telepon       String?       @db.VarChar(30)
+  created_at    DateTime      @default(now())
+  barang_masuk  BarangMasuk[]
+
+  @@map("supplier")
+}
+
+model Divisi {
+  id_divisi     Int            @id @default(autoincrement())
+  nama_divisi   String         @unique @db.VarChar(100)
+  created_at    DateTime       @default(now())
+  barang_keluar BarangKeluar[]
+
+  @@map("divisi")
+}
+
+model Barang {
+  id_barang     Int            @id @default(autoincrement())
+  kode_barang   String         @unique @db.VarChar(50)
+  nama_barang   String         @db.VarChar(150)
+  id_kategori   Int
+  satuan        String         @db.VarChar(30)
+  stok          Int            @default(0)
+  stok_minimum  Int            @default(0)
+  lokasi        String?        @db.VarChar(100)
+  created_at    DateTime       @default(now())
+  updated_at    DateTime       @updatedAt
+  kategori      Kategori       @relation(fields: [id_kategori], references: [id_kategori], onDelete: Restrict)
+  barang_masuk  BarangMasuk[]
+  barang_keluar BarangKeluar[]
+
+  @@index([id_kategori])
+  @@index([stok, stok_minimum])
+  @@map("barang")
+}
+
+model BarangMasuk {
+  id_masuk    Int      @id @default(autoincrement())
+  tanggal     DateTime @db.Date
+  id_barang   Int
+  jumlah      Int
+  id_supplier Int
+  id_user     Int
+  keterangan  String?  @db.VarChar(255)
+  created_at  DateTime @default(now())
+  barang      Barang   @relation(fields: [id_barang], references: [id_barang], onDelete: Restrict)
+  supplier    Supplier @relation(fields: [id_supplier], references: [id_supplier], onDelete: Restrict)
+  user        User     @relation(fields: [id_user], references: [id_user], onDelete: Restrict)
+
+  @@index([tanggal])
+  @@index([id_barang])
+  @@index([id_supplier])
+  @@index([id_user])
+  @@map("barang_masuk")
+}
+
+model BarangKeluar {
+  id_keluar   Int      @id @default(autoincrement())
+  tanggal     DateTime @db.Date
+  id_barang   Int
+  jumlah      Int
+  id_divisi   Int
+  id_user     Int
+  keterangan  String?  @db.VarChar(255)
+  created_at  DateTime @default(now())
+  barang      Barang   @relation(fields: [id_barang], references: [id_barang], onDelete: Restrict)
+  divisi      Divisi   @relation(fields: [id_divisi], references: [id_divisi], onDelete: Restrict)
+  user        User     @relation(fields: [id_user], references: [id_user], onDelete: Restrict)
+
+  @@index([tanggal])
+  @@index([id_barang])
+  @@index([id_divisi])
+  @@index([id_user])
+  @@map("barang_keluar")
+}
