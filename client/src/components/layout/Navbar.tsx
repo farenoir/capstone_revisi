@@ -1,7 +1,7 @@
 import React from "react";
-import { LogOut, User as UserIcon, Menu, Home } from "lucide-react";
+import { LogOut, User as UserIcon, Menu } from "lucide-react";
 import { useAuthStore } from "../../store/useAuthStore";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
   onToggleSidebar: () => void;
@@ -29,15 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
         <span className="text-sm font-semibold text-slate-700 md:hidden">Sistem ATK</span>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Link
-          to="/"
-          title="Kembali ke Halaman Depan"
-          className="flex min-h-[44px] items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-          <Home className="h-4 w-4" />
-          <span className="hidden sm:inline">Halaman Depan</span>
-        </Link>
+      <div className="flex items-center gap-4">
 
         {user && (
           <div className="flex items-center gap-3">

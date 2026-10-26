@@ -14,8 +14,11 @@ import {
   LogIn,
   LayoutDashboard,
   Check,
+  LogOut,
+  User as UserIcon,
 } from "lucide-react";
 import { apiClient } from "../../api/client";
+import { useAuthStore } from "../../store/useAuthStore";
 
 interface QuickItem {
   id_barang: number;
@@ -33,7 +36,8 @@ export const LandingPage: React.FC = () => {
   const [items, setItems] = useState<QuickItem[]>([]);
   const [loadingItems, setLoadingItems] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string>("Semua");
-  const isAuthenticated = Boolean(localStorage.getItem("token"));
+  const { user, token, logout } = useAuthStore();
+  const isAuthenticated = Boolean(token);
 
   useEffect(() => {
     const fetchQuickItems = async () => {
@@ -102,13 +106,44 @@ export const LandingPage: React.FC = () => {
                 <span>Diagram DB</span>
               </Link>
               {isAuthenticated ? (
-                <Link
-                  to="/dashboard"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition-colors"
-                >
-                  <LayoutDashboard className="h-3.5 w-3.5" />
-                  <span>Buka Dashboard</span>
-                </Link>
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition-colors"
+                  >
+                    <LayoutDashboard className="h-3.5 w-3.5" />
+                    <span>Buka Dashboard</span>
+                  </Link>
+
+                  {user && (
+                    <div className="hidden sm:flex items-center gap-2.5 px-2.5 py-1 rounded-lg border border-slate-200 bg-white">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-100 text-indigo-700">
+                        <UserIcon className="h-4 w-4" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-xs font-medium text-slate-800 leading-tight">{user.nama}</p>
+                        <span
+                          className={`inline-block text-[10px] font-semibold uppercase px-1.5 py-0.2 rounded-full ${
+                            user.role === "admin"
+                              ? "bg-indigo-50 text-indigo-700 border border-indigo-200"
+                              : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                          }`}
+                        >
+                          {user.role}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => logout()}
+                    title="Keluar dari akun"
+                    className="flex min-h-[38px] items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-red-50 hover:text-red-700 hover:border-red-200 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Keluar</span>
+                  </button>
+                </>
               ) : (
                 <Link
                   to="/login"
