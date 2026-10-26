@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { apiClient } from "../../api/client";
 import { useAuthStore } from "../../store/useAuthStore";
-import { Boxes, AlertCircle, Loader2 } from "lucide-react";
+import { Boxes, AlertCircle, Loader2, ArrowLeft, KeyRound } from "lucide-react";
 
 export const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -12,6 +12,12 @@ export const LoginPage: React.FC = () => {
 
   const { login } = useAuthStore();
   const navigate = useNavigate();
+
+  const handleFillDemo = (u: string, p: string) => {
+    setUsername(u);
+    setPassword(p);
+    setErrorMsg("");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +52,17 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm border border-slate-200">
+        {/* Back Link */}
+        <div className="mb-4">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-indigo-600 transition-colors"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Kembali ke Halaman Depan</span>
+          </Link>
+        </div>
+
         <div className="text-center mb-8">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-md">
             <Boxes className="h-8 w-8" />
@@ -54,7 +71,7 @@ export const LoginPage: React.FC = () => {
             Sistem Informasi ATK
           </h1>
           <p className="mt-1 text-sm text-slate-500">
-            Pencatatan Barang Masuk & Keluar Alat Tulis Kantor
+            Pencatatan Barang Masuk &amp; Keluar Alat Tulis Kantor
           </p>
         </div>
 
@@ -119,8 +136,32 @@ export const LoginPage: React.FC = () => {
           </button>
         </form>
 
-        <div className="mt-6 border-t border-slate-100 pt-4 text-center text-xs text-slate-400">
-          Akses terotentikasi &bull; Hak Akses: Admin & Pimpinan
+        {/* Quick Demo Credentials */}
+        <div className="mt-6 pt-5 border-t border-slate-100">
+          <div className="text-[11px] font-semibold text-slate-500 mb-2 flex items-center gap-1">
+            <KeyRound className="h-3 w-3" />
+            <span>Kredensial Cepat Evaluator / Reviewer:</span>
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => handleFillDemo("admin", "admin123")}
+              className="flex-1 text-center py-1.5 px-2 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 border border-slate-200 text-xs font-medium text-slate-700 transition-colors"
+            >
+              Akun Admin
+            </button>
+            <button
+              type="button"
+              onClick={() => handleFillDemo("pimpinan", "pimpinan123")}
+              className="flex-1 text-center py-1.5 px-2 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 border border-slate-200 text-xs font-medium text-slate-700 transition-colors"
+            >
+              Akun Pimpinan
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-4 text-center text-xs text-slate-400">
+          Akses terotentikasi &bull; Hak Akses: Admin &amp; Pimpinan
         </div>
       </div>
     </div>

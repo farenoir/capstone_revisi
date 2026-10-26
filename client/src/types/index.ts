@@ -140,6 +140,30 @@ export interface MutasiReportRow {
   keterangan: string;
 }
 
+export interface SaldoAkhirRow {
+  id_barang: number;
+  kode_barang: string;
+  nama_barang: string;
+  kategori: string;
+  satuan: string;
+  total_masuk: number;
+  total_keluar: number;
+  saldo_akhir: number;
+  stok_minimum: number;
+  harga_satuan: number;
+  nilai_saldo_akhir: number;
+  expired_date?: string | null;
+  lokasi?: string | null;
+  status_stok: "aman" | "kritis" | "habis";
+}
+
+export interface SaldoAkhirSummary {
+  total_item: number;
+  total_stok_unit: number;
+  total_nilai_persediaan: number;
+  total_kritis: number;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   message?: string;

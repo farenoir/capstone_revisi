@@ -27,7 +27,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { label: "Divisi", to: "/divisi", icon: Building2 },
     { label: "Barang Masuk", to: "/barang-masuk", icon: ArrowDownToLine },
     { label: "Barang Keluar", to: "/barang-keluar", icon: ArrowUpFromLine },
-    { label: "Laporan Mutasi", to: "/laporan", icon: FileSpreadsheet },
+    { label: "Laporan & Saldo", to: "/laporan", icon: FileSpreadsheet },
+    { label: "Diagram DB XAMPP", to: "/diagram-database", icon: Boxes },
   ];
 
   return (

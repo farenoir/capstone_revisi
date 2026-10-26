@@ -103,9 +103,212 @@ export const getMutasiReportData = async (req: Request, res: Response, next: Nex
   }
 };
 
+export const getSaldoAkhirReport = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id_kategori, status, search } = req.query;
+
+    const where: any = {};
+    if (id_kategori) where.id_kategori = Number(id_kategori);
+    if (search) {
+      where.OR = [
+        { kode_barang: { contains: String(search) } },
+        { nama_barang: { contains: String(search) } },
+      ];
+    }
+
+    const items = await prisma.barang.findMany({
+      where,
+      include: {
+        kategori: true,
+        barang_masuk: { select: { jumlah: true } },
+        barang_keluar: { select: { jumlah: true } },
+      },
+      orderBy: { kode_barang: "asc" },
+    });
+
+    let rows = items.map((b) => {
+      const total_masuk = b.barang_masuk.reduce((acc, curr) => acc + curr.jumlah, 0);
+      const total_keluar = b.barang_keluar.reduce((acc, curr) => acc + curr.jumlah, 0);
+      const saldo_akhir = b.stok;
+      const nilai_saldo_akhir = saldo_akhir * (b.harga_satuan || 0);
+
+      let status_stok: "aman" | "kritis" | "habis" = "aman";
+      if (saldo_akhir <= 0) {
+        status_stok = "habis";
+      } else if (saldo_akhir <= b.stok_minimum) {
+        status_stok = "kritis";
+      }
+
+      return {
+        id_barang: b.id_barang,
+        kode_barang: b.kode_barang,
+        nama_barang: b.nama_barang,
+        kategori: b.kategori.nama_kategori,
+        satuan: b.satuan,
+        total_masuk,
+        total_keluar,
+        saldo_akhir,
+        stok_minimum: b.stok_minimum,
+        harga_satuan: b.harga_satuan || 0,
+        nilai_saldo_akhir,
+        expired_date: b.expired_date ? b.expired_date.toISOString().split("T")[0] : null,
+        lokasi: b.lokasi || "-",
+        status_stok,
+      };
+    });
+
+    if (status) {
+      rows = rows.filter((r) => r.status_stok === status);
+    }
+
+    const summary = {
+      total_item: rows.length,
+      total_stok_unit: rows.reduce((acc, r) => acc + r.saldo_akhir, 0),
+      total_nilai_persediaan: rows.reduce((acc, r) => acc + r.nilai_saldo_akhir, 0),
+      total_kritis: rows.filter((r) => r.status_stok === "kritis" || r.status_stok === "habis").length,
+    };
+
+    return sendSuccess(res, { summary, rows });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const exportReport = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { format = "xlsx", type = "mutasi", start_date, end_date } = req.query;
+    const { format = "xlsx", type = "mutasi", start_date, end_date, id_kategori, status } = req.query;
+
+    if (type === "saldo_akhir") {
+      const where: any = {};
+      if (id_kategori) where.id_kategori = Number(id_kategori);
+
+      const items = await prisma.barang.findMany({
+        where,
+        include: {
+          kategori: true,
+          barang_masuk: { select: { jumlah: true } },
+          barang_keluar: { select: { jumlah: true } },
+        },
+        orderBy: { kode_barang: "asc" },
+      });
+
+      let rows = items.map((b, idx) => {
+        const total_masuk = b.barang_masuk.reduce((acc, curr) => acc + curr.jumlah, 0);
+        const total_keluar = b.barang_keluar.reduce((acc, curr) => acc + curr.jumlah, 0);
+        const saldo_akhir = b.stok;
+        const nilai_saldo_akhir = saldo_akhir * (b.harga_satuan || 0);
+
+        let status_stok = "Aman";
+        if (saldo_akhir <= 0) {
+          status_stok = "Habis";
+        } else if (saldo_akhir <= b.stok_minimum) {
+          status_stok = "Kritis";
+        }
+
+        return {
+          no: idx + 1,
+          kode_barang: b.kode_barang,
+          nama_barang: b.nama_barang,
+          kategori: b.kategori.nama_kategori,
+          satuan: b.satuan,
+          total_masuk,
+          total_keluar,
+          saldo_akhir,
+          stok_minimum: b.stok_minimum,
+          harga_satuan: b.harga_satuan || 0,
+          nilai_saldo_akhir,
+          expired_date: b.expired_date ? b.expired_date.toISOString().split("T")[0] : "-",
+          status_stok,
+        };
+      });
+
+      if (status) {
+        rows = rows.filter((r) => r.status_stok.toLowerCase() === (status as string).toLowerCase());
+      }
+
+      const filename = `Laporan_Saldo_Akhir_ATK_${new Date().toISOString().split("T")[0]}`;
+
+      if (format === "csv") {
+        res.setHeader("Content-Type", "text/csv; charset=utf-8");
+        res.setHeader("Content-Disposition", `attachment; filename="${filename}.csv"`);
+
+        const csvStream = formatCsv({ headers: true });
+        csvStream.pipe(res);
+
+        for (const row of rows) {
+          csvStream.write(row);
+        }
+        csvStream.end();
+        return;
+      }
+
+      // ExcelJS Workbook
+      const workbook = new ExcelJS.Workbook();
+      workbook.creator = "Sistem Informasi ATK";
+      workbook.created = new Date();
+
+      const worksheet = workbook.addWorksheet("Saldo Akhir ATK");
+
+      worksheet.columns = [
+        { header: "No", key: "no", width: 6 },
+        { header: "Kode Barang", key: "kode_barang", width: 14 },
+        { header: "Nama Barang", key: "nama_barang", width: 32 },
+        { header: "Kategori", key: "kategori", width: 20 },
+        { header: "Satuan", key: "satuan", width: 10 },
+        { header: "Total Masuk", key: "total_masuk", width: 13 },
+        { header: "Total Keluar", key: "total_keluar", width: 13 },
+        { header: "Saldo Akhir", key: "saldo_akhir", width: 13 },
+        { header: "Stok Min", key: "stok_minimum", width: 11 },
+        { header: "Harga Satuan (Rp)", key: "harga_satuan", width: 18 },
+        { header: "Nilai Persediaan (Rp)", key: "nilai_saldo_akhir", width: 22 },
+        { header: "Kedaluwarsa", key: "expired_date", width: 14 },
+        { header: "Status", key: "status_stok", width: 12 },
+      ];
+
+      // Header style
+      const headerRow = worksheet.getRow(1);
+      headerRow.font = { bold: true, color: { argb: "FFFFFFFF" } };
+      headerRow.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FF0F766E" }, // Teal 700
+      };
+      headerRow.alignment = { vertical: "middle", horizontal: "center" };
+
+      rows.forEach((r) => {
+        worksheet.addRow(r);
+      });
+
+      // Total summary row
+      const totalStok = rows.reduce((acc, r) => acc + r.saldo_akhir, 0);
+      const totalNilai = rows.reduce((acc, r) => acc + r.nilai_saldo_akhir, 0);
+      const summaryRow = worksheet.addRow({
+        no: "",
+        kode_barang: "",
+        nama_barang: "TOTAL AKUMULASI",
+        kategori: "",
+        satuan: "",
+        total_masuk: rows.reduce((acc, r) => acc + r.total_masuk, 0),
+        total_keluar: rows.reduce((acc, r) => acc + r.total_keluar, 0),
+        saldo_akhir: totalStok,
+        stok_minimum: "",
+        harga_satuan: "",
+        nilai_saldo_akhir: totalNilai,
+        expired_date: "",
+        status_stok: "",
+      });
+      summaryRow.font = { bold: true };
+
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+      res.setHeader("Content-Disposition", `attachment; filename="${filename}.xlsx"`);
+
+      await workbook.xlsx.write(res);
+      res.end();
+      return;
+    }
 
     const dateFilter: any = {};
     if (start_date) dateFilter.gte = new Date(start_date as string);

@@ -1,0 +1,379 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" width="1440" height="900" style="background:#f5f7fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Background grid pattern -->
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#d2d9e1"/>
+    </pattern>
+    <!-- Drop shadow for cards -->
+    <filter id="shadow" x="-5%" y="-5%" width="112%" height="115%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.12"/>
+    </filter>
+    <!-- Markers for relationships -->
+    <marker id="marker-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1d4ed8"/>
+    </marker>
+    <marker id="marker-dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6">
+      <circle cx="5" cy="5" r="3.5" fill="#1d4ed8"/>
+    </marker>
+  </defs>
+
+  <!-- phpMyAdmin Top Window Frame / Menubar -->
+  <rect x="0" y="0" width="1440" height="42" fill="#e4ebf2" stroke="#c8d4df" stroke-width="1"/>
+  
+  <!-- phpMyAdmin Logo Brand -->
+  <rect x="16" y="7" width="116" height="28" rx="4" fill="#ffffff" stroke="#b8c7d6" stroke-width="1"/>
+  <text x="24" y="26" font-size="14" font-weight="900" fill="#ea580c">php</text>
+  <text x="50" y="26" font-size="14" font-weight="900" fill="#1d4ed8">MyAdmin</text>
+  <text x="106" y="22" font-size="9" fill="#64748b">5.2.1</text>
+
+  <!-- Breadcrumbs -->
+  <text x="146" y="25" font-size="12" fill="#475569" font-family="monospace">
+    Server: <tspan font-weight="bold" fill="#0f172a">127.0.0.1:3306</tspan> &gt;&gt; Database: <tspan font-weight="bold" fill="#854d0e" background="#fef3c7">capstone</tspan> &gt;&gt; <tspan font-weight="bold" fill="#1e40af">Designer</tspan>
+  </text>
+
+  <!-- phpMyAdmin Tab Navigation -->
+  <g transform="translate(0, 42)">
+    <rect x="0" y="0" width="1440" height="32" fill="#d9e3ed" stroke="#b5c7d8" stroke-width="1"/>
+    
+    <g font-size="11" fill="#334155" text-anchor="middle">
+      <rect x="16" y="6" width="70" height="26" rx="3" fill="#cbd5e1"/>
+      <text x="51" y="23">Struktur</text>
+      
+      <rect x="92" y="6" width="55" height="26" rx="3" fill="#cbd5e1"/>
+      <text x="119" y="23">SQL</text>
+      
+      <rect x="153" y="6" width="55" height="26" rx="3" fill="#cbd5e1"/>
+      <text x="180" y="23">Cari</text>
+      
+      <rect x="214" y="6" width="60" height="26" rx="3" fill="#cbd5e1"/>
+      <text x="244" y="23">Kueri</text>
+      
+      <rect x="280" y="6" width="65" height="26" rx="3" fill="#cbd5e1"/>
+      <text x="312" y="23">Ekspor</text>
+      
+      <rect x="351" y="6" width="60" height="26" rx="3" fill="#cbd5e1"/>
+      <text x="381" y="23">Impor</text>
+
+      <rect x="417" y="6" width="70" height="26" rx="3" fill="#cbd5e1"/>
+      <text x="452" y="23">Operasi</text>
+
+      <rect x="493" y="6" width="75" height="26" rx="3" fill="#cbd5e1"/>
+      <text x="530" y="23">Hak Akses</text>
+
+      <!-- Active Designer Tab -->
+      <path d="M 574 6 L 684 6 L 684 32 L 574 32 Z" fill="#f5f7fa"/>
+      <line x1="574" y1="6" x2="684" y2="6" stroke="#2563eb" stroke-width="3"/>
+      <text x="629" y="23" font-weight="bold" fill="#0f172a">Designer (ERD)</text>
+    </g>
+  </g>
+
+  <!-- Canvas Background -->
+  <rect x="0" y="74" width="1440" height="826" fill="url(#grid)"/>
+
+  <!-- Watermark Information Tag -->
+  <rect x="20" y="88" width="410" height="30" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="32" y="108" font-size="12" font-weight="bold" fill="#0f172a" font-family="monospace">
+    DATABASE: capstone (MySQL 8.0 / InnoDB / utf8mb4)
+  </text>
+
+  <!-- RELATION LINES (SVG Bezier Curves) -->
+  <g fill="none" stroke="#2563eb" stroke-width="2">
+    <!-- 1. kategori.id_kategori -> barang.id_kategori -->
+    <path d="M 290 190 C 320 190, 320 185, 360 185" marker-start="url(#marker-dot)" marker-end="url(#marker-arrow)"/>
+
+    <!-- 2. barang.id_barang -> barang_masuk.id_barang -->
+    <path d="M 505 385 C 505 450, 480 500, 480 575" marker-start="url(#marker-dot)" marker-end="url(#marker-arrow)"/>
+
+    <!-- 3. supplier.id_supplier -> barang_masuk.id_supplier -->
+    <path d="M 300 480 C 330 480, 330 620, 360 620" marker-start="url(#marker-dot)" marker-end="url(#marker-arrow)"/>
+
+    <!-- 4. users.id_user -> barang_masuk.id_user -->
+    <path d="M 730 550 C 690 550, 680 645, 640 645" marker-start="url(#marker-dot)" marker-end="url(#marker-arrow)"/>
+
+    <!-- 5. barang.id_barang -> barang_keluar.id_barang -->
+    <path d="M 640 115 C 685 115, 685 205, 730 205" marker-start="url(#marker-dot)" marker-end="url(#marker-arrow)"/>
+
+    <!-- 6. divisi.id_divisi -> barang_keluar.id_divisi -->
+    <path d="M 1070 190 C 1040 190, 1030 250, 1010 250" marker-start="url(#marker-dot)" marker-end="url(#marker-arrow)"/>
+
+    <!-- 7. users.id_user -> barang_keluar.id_user -->
+    <path d="M 850 510 C 850 400, 870 330, 870 270" marker-start="url(#marker-dot)" marker-end="url(#marker-arrow)"/>
+  </g>
+
+  <!-- TABLE 1: kategori -->
+  <g transform="translate(50, 140)" filter="url(#shadow)">
+    <rect width="240" height="114" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+    <path d="M 0 4 Q 0 0 4 0 L 236 0 Q 240 0 240 4 L 240 30 L 0 30 Z" fill="#dbe5ee"/>
+    <line x1="0" y1="30" x2="240" y2="30" stroke="#94a3b8" stroke-width="1"/>
+    <text x="10" y="20" font-size="12" fill="#475569">▦</text>
+    <text x="24" y="21" font-size="13" font-weight="bold" fill="#0f172a">kategori</text>
+    <text x="214" y="20" font-size="11" fill="#64748b" font-family="monospace">_ ×</text>
+    <!-- Rows -->
+    <text x="8" y="52" font-size="12">🔑</text>
+    <text x="26" y="52" font-size="12" font-weight="bold" fill="#854d0e" font-family="monospace">id_kategori</text>
+    <text x="232" y="52" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="60" width="238" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="72" r="2" fill="#94a3b8"/>
+    <text x="26" y="76" font-size="12" fill="#1e293b" font-family="monospace">nama_kategori</text>
+    <text x="232" y="76" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(100)</text>
+
+    <circle cx="14" cy="96" r="2" fill="#94a3b8"/>
+    <text x="26" y="100" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
+    <text x="232" y="100" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+  </g>
+
+  <!-- TABLE 2: barang -->
+  <g transform="translate(360, 90)" filter="url(#shadow)">
+    <rect width="280" height="326" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+    <path d="M 0 4 Q 0 0 4 0 L 276 0 Q 280 0 280 4 L 280 30 L 0 30 Z" fill="#dbe5ee"/>
+    <line x1="0" y1="30" x2="280" y2="30" stroke="#94a3b8" stroke-width="1"/>
+    <text x="10" y="20" font-size="12" fill="#475569">▦</text>
+    <text x="24" y="21" font-size="13" font-weight="bold" fill="#0f172a">barang</text>
+    <text x="254" y="20" font-size="11" fill="#64748b" font-family="monospace">_ ×</text>
+    <!-- Rows -->
+    <text x="8" y="52" font-size="12">🔑</text>
+    <text x="26" y="52" font-size="12" font-weight="bold" fill="#854d0e" font-family="monospace">id_barang</text>
+    <text x="272" y="52" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="60" width="278" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="72" r="2" fill="#94a3b8"/>
+    <text x="26" y="76" font-size="12" fill="#1e293b" font-family="monospace">kode_barang</text>
+    <text x="272" y="76" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(50)</text>
+
+    <circle cx="14" cy="96" r="2" fill="#94a3b8"/>
+    <text x="26" y="100" font-size="12" fill="#1e293b" font-family="monospace">nama_barang</text>
+    <text x="272" y="100" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(150)</text>
+
+    <rect x="1" y="108" width="278" height="24" fill="#eff6ff"/>
+    <text x="8" y="124" font-size="11">🔗</text>
+    <text x="26" y="124" font-size="12" font-weight="bold" fill="#1e40af" font-family="monospace">id_kategori</text>
+    <text x="272" y="124" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <circle cx="14" cy="144" r="2" fill="#94a3b8"/>
+    <text x="26" y="148" font-size="12" fill="#1e293b" font-family="monospace">satuan</text>
+    <text x="272" y="148" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(30)</text>
+
+    <rect x="1" y="156" width="278" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="168" r="2" fill="#94a3b8"/>
+    <text x="26" y="172" font-size="12" fill="#1e293b" font-family="monospace">stok</text>
+    <text x="272" y="172" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <circle cx="14" cy="192" r="2" fill="#94a3b8"/>
+    <text x="26" y="196" font-size="12" fill="#1e293b" font-family="monospace">stok_minimum</text>
+    <text x="272" y="196" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="204" width="278" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="216" r="2" fill="#94a3b8"/>
+    <text x="26" y="220" font-size="12" fill="#1e293b" font-family="monospace">harga_satuan</text>
+    <text x="272" y="220" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="228" width="278" height="24" fill="#fffbeb"/>
+    <circle cx="14" cy="240" r="2" fill="#b45309"/>
+    <text x="26" y="244" font-size="12" font-weight="bold" fill="#b45309" font-family="monospace">expired_date</text>
+    <text x="272" y="244" font-size="11" fill="#b45309" text-anchor="end" font-family="monospace">date (null)</text>
+
+    <circle cx="14" cy="264" r="2" fill="#94a3b8"/>
+    <text x="26" y="268" font-size="12" fill="#1e293b" font-family="monospace">lokasi</text>
+    <text x="272" y="268" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(100)</text>
+
+    <rect x="1" y="276" width="278" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="288" r="2" fill="#94a3b8"/>
+    <text x="26" y="292" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
+    <text x="272" y="292" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+
+    <circle cx="14" cy="312" r="2" fill="#94a3b8"/>
+    <text x="26" y="316" font-size="12" fill="#1e293b" font-family="monospace">updated_at</text>
+    <text x="272" y="316" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+  </g>
+
+  <!-- TABLE 3: supplier -->
+  <g transform="translate(50, 420)" filter="url(#shadow)">
+    <rect width="250" height="154" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+    <path d="M 0 4 Q 0 0 4 0 L 246 0 Q 250 0 250 4 L 250 30 L 0 30 Z" fill="#dbe5ee"/>
+    <line x1="0" y1="30" x2="250" y2="30" stroke="#94a3b8" stroke-width="1"/>
+    <text x="10" y="20" font-size="12" fill="#475569">▦</text>
+    <text x="24" y="21" font-size="13" font-weight="bold" fill="#0f172a">supplier</text>
+    <text x="224" y="20" font-size="11" fill="#64748b" font-family="monospace">_ ×</text>
+    <!-- Rows -->
+    <text x="8" y="52" font-size="12">🔑</text>
+    <text x="26" y="52" font-size="12" font-weight="bold" fill="#854d0e" font-family="monospace">id_supplier</text>
+    <text x="242" y="52" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="60" width="248" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="72" r="2" fill="#94a3b8"/>
+    <text x="26" y="76" font-size="12" fill="#1e293b" font-family="monospace">nama_supplier</text>
+    <text x="242" y="76" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(150)</text>
+
+    <circle cx="14" cy="96" r="2" fill="#94a3b8"/>
+    <text x="26" y="100" font-size="12" fill="#1e293b" font-family="monospace">alamat</text>
+    <text x="242" y="100" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">text (null)</text>
+
+    <rect x="1" y="108" width="248" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="120" r="2" fill="#94a3b8"/>
+    <text x="26" y="124" font-size="12" fill="#1e293b" font-family="monospace">telepon</text>
+    <text x="242" y="124" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(30)</text>
+
+    <circle cx="14" cy="144" r="2" fill="#94a3b8"/>
+    <text x="26" y="148" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
+    <text x="242" y="148" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+  </g>
+
+  <!-- TABLE 4: barang_masuk -->
+  <g transform="translate(360, 510)" filter="url(#shadow)">
+    <rect width="280" height="226" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+    <path d="M 0 4 Q 0 0 4 0 L 276 0 Q 280 0 280 4 L 280 30 L 0 30 Z" fill="#dbe5ee"/>
+    <line x1="0" y1="30" x2="280" y2="30" stroke="#94a3b8" stroke-width="1"/>
+    <text x="10" y="20" font-size="12" fill="#475569">▦</text>
+    <text x="24" y="21" font-size="13" font-weight="bold" fill="#0f172a">barang_masuk</text>
+    <text x="254" y="20" font-size="11" fill="#64748b" font-family="monospace">_ ×</text>
+    <!-- Rows -->
+    <text x="8" y="52" font-size="12">🔑</text>
+    <text x="26" y="52" font-size="12" font-weight="bold" fill="#854d0e" font-family="monospace">id_masuk</text>
+    <text x="272" y="52" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="60" width="278" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="72" r="2" fill="#94a3b8"/>
+    <text x="26" y="76" font-size="12" fill="#1e293b" font-family="monospace">tanggal</text>
+    <text x="272" y="76" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">date</text>
+
+    <rect x="1" y="84" width="278" height="24" fill="#eff6ff"/>
+    <text x="8" y="100" font-size="11">🔗</text>
+    <text x="26" y="100" font-size="12" font-weight="bold" fill="#1e40af" font-family="monospace">id_barang</text>
+    <text x="272" y="100" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <circle cx="14" cy="120" r="2" fill="#94a3b8"/>
+    <text x="26" y="124" font-size="12" fill="#1e293b" font-family="monospace">jumlah</text>
+    <text x="272" y="124" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="132" width="278" height="24" fill="#eff6ff"/>
+    <text x="8" y="148" font-size="11">🔗</text>
+    <text x="26" y="148" font-size="12" font-weight="bold" fill="#1e40af" font-family="monospace">id_supplier</text>
+    <text x="272" y="148" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="156" width="278" height="24" fill="#eff6ff"/>
+    <text x="8" y="172" font-size="11">🔗</text>
+    <text x="26" y="172" font-size="12" font-weight="bold" fill="#1e40af" font-family="monospace">id_user</text>
+    <text x="272" y="172" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <circle cx="14" cy="192" r="2" fill="#94a3b8"/>
+    <text x="26" y="196" font-size="12" fill="#1e293b" font-family="monospace">keterangan</text>
+    <text x="272" y="196" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(255)</text>
+
+    <rect x="1" y="204" width="278" height="21" fill="#f8fafc"/>
+    <circle cx="14" cy="215" r="2" fill="#94a3b8"/>
+    <text x="26" y="219" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
+    <text x="272" y="219" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+  </g>
+
+  <!-- TABLE 5: users -->
+  <g transform="translate(730, 480)" filter="url(#shadow)">
+    <rect width="260" height="202" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+    <path d="M 0 4 Q 0 0 4 0 L 256 0 Q 260 0 260 4 L 260 30 L 0 30 Z" fill="#dbe5ee"/>
+    <line x1="0" y1="30" x2="260" y2="30" stroke="#94a3b8" stroke-width="1"/>
+    <text x="10" y="20" font-size="12" fill="#475569">▦</text>
+    <text x="24" y="21" font-size="13" font-weight="bold" fill="#0f172a">users</text>
+    <text x="234" y="20" font-size="11" fill="#64748b" font-family="monospace">_ ×</text>
+    <!-- Rows -->
+    <text x="8" y="52" font-size="12">🔑</text>
+    <text x="26" y="52" font-size="12" font-weight="bold" fill="#854d0e" font-family="monospace">id_user</text>
+    <text x="252" y="52" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="60" width="258" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="72" r="2" fill="#94a3b8"/>
+    <text x="26" y="76" font-size="12" fill="#1e293b" font-family="monospace">nama</text>
+    <text x="252" y="76" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(100)</text>
+
+    <circle cx="14" cy="96" r="2" fill="#94a3b8"/>
+    <text x="26" y="100" font-size="12" fill="#1e293b" font-family="monospace">username</text>
+    <text x="252" y="100" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(50)</text>
+
+    <rect x="1" y="108" width="258" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="120" r="2" fill="#94a3b8"/>
+    <text x="26" y="124" font-size="12" fill="#1e293b" font-family="monospace">password</text>
+    <text x="252" y="124" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(255)</text>
+
+    <circle cx="14" cy="144" r="2" fill="#94a3b8"/>
+    <text x="26" y="148" font-size="12" fill="#1e293b" font-family="monospace">role</text>
+    <text x="252" y="148" font-size="10" fill="#64748b" text-anchor="end" font-family="monospace">enum('admin'..)</text>
+
+    <rect x="1" y="156" width="258" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="168" r="2" fill="#94a3b8"/>
+    <text x="26" y="172" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
+    <text x="252" y="172" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+
+    <circle cx="14" cy="192" r="2" fill="#94a3b8"/>
+    <text x="26" y="196" font-size="12" fill="#1e293b" font-family="monospace">updated_at</text>
+    <text x="252" y="196" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+  </g>
+
+  <!-- TABLE 6: divisi -->
+  <g transform="translate(1070, 140)" filter="url(#shadow)">
+    <rect width="240" height="114" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+    <path d="M 0 4 Q 0 0 4 0 L 236 0 Q 240 0 240 4 L 240 30 L 0 30 Z" fill="#dbe5ee"/>
+    <line x1="0" y1="30" x2="240" y2="30" stroke="#94a3b8" stroke-width="1"/>
+    <text x="10" y="20" font-size="12" fill="#475569">▦</text>
+    <text x="24" y="21" font-size="13" font-weight="bold" fill="#0f172a">divisi</text>
+    <text x="214" y="20" font-size="11" fill="#64748b" font-family="monospace">_ ×</text>
+    <!-- Rows -->
+    <text x="8" y="52" font-size="12">🔑</text>
+    <text x="26" y="52" font-size="12" font-weight="bold" fill="#854d0e" font-family="monospace">id_divisi</text>
+    <text x="232" y="52" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="60" width="238" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="72" r="2" fill="#94a3b8"/>
+    <text x="26" y="76" font-size="12" fill="#1e293b" font-family="monospace">nama_divisi</text>
+    <text x="232" y="76" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(100)</text>
+
+    <circle cx="14" cy="96" r="2" fill="#94a3b8"/>
+    <text x="26" y="100" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
+    <text x="232" y="100" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+  </g>
+
+  <!-- TABLE 7: barang_keluar -->
+  <g transform="translate(730, 110)" filter="url(#shadow)">
+    <rect width="280" height="226" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+    <path d="M 0 4 Q 0 0 4 0 L 276 0 Q 280 0 280 4 L 280 30 L 0 30 Z" fill="#dbe5ee"/>
+    <line x1="0" y1="30" x2="280" y2="30" stroke="#94a3b8" stroke-width="1"/>
+    <text x="10" y="20" font-size="12" fill="#475569">▦</text>
+    <text x="24" y="21" font-size="13" font-weight="bold" fill="#0f172a">barang_keluar</text>
+    <text x="254" y="20" font-size="11" fill="#64748b" font-family="monospace">_ ×</text>
+    <!-- Rows -->
+    <text x="8" y="52" font-size="12">🔑</text>
+    <text x="26" y="52" font-size="12" font-weight="bold" fill="#854d0e" font-family="monospace">id_keluar</text>
+    <text x="272" y="52" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="60" width="278" height="24" fill="#f8fafc"/>
+    <circle cx="14" cy="72" r="2" fill="#94a3b8"/>
+    <text x="26" y="76" font-size="12" fill="#1e293b" font-family="monospace">tanggal</text>
+    <text x="272" y="76" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">date</text>
+
+    <rect x="1" y="84" width="278" height="24" fill="#eff6ff"/>
+    <text x="8" y="100" font-size="11">🔗</text>
+    <text x="26" y="100" font-size="12" font-weight="bold" fill="#1e40af" font-family="monospace">id_barang</text>
+    <text x="272" y="100" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <circle cx="14" cy="120" r="2" fill="#94a3b8"/>
+    <text x="26" y="124" font-size="12" fill="#1e293b" font-family="monospace">jumlah</text>
+    <text x="272" y="124" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="132" width="278" height="24" fill="#eff6ff"/>
+    <text x="8" y="148" font-size="11">🔗</text>
+    <text x="26" y="148" font-size="12" font-weight="bold" fill="#1e40af" font-family="monospace">id_divisi</text>
+    <text x="272" y="148" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <rect x="1" y="156" width="278" height="24" fill="#eff6ff"/>
+    <text x="8" y="172" font-size="11">🔗</text>
+    <text x="26" y="172" font-size="12" font-weight="bold" fill="#1e40af" font-family="monospace">id_user</text>
+    <text x="272" y="172" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
+
+    <circle cx="14" cy="192" r="2" fill="#94a3b8"/>
+    <text x="26" y="196" font-size="12" fill="#1e293b" font-family="monospace">keterangan</text>
+    <text x="272" y="196" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(255)</text>
+
+    <rect x="1" y="204" width="278" height="21" fill="#f8fafc"/>
+    <circle cx="14" cy="215" r="2" fill="#94a3b8"/>
+    <text x="26" y="219" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
+    <text x="272" y="219" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+  </g>
+</svg>
