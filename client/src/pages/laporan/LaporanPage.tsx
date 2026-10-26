@@ -4,8 +4,10 @@ import { MutasiReportRow, Kategori, Supplier, Divisi } from "../../types";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { EmptyState } from "../../components/common/EmptyState";
 import { FileSpreadsheet, Download } from "lucide-react";
+import { useToast } from "../../components/common/Toast";
 
 export const LaporanPage: React.FC = () => {
+  const { showToast } = useToast();
   const [data, setData] = useState<MutasiReportRow[]>([]);
   const [categories, setCategories] = useState<Kategori[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -56,6 +58,7 @@ export const LaporanPage: React.FC = () => {
       setData(res.data.data);
     } catch (err) {
       console.error(err);
+      showToast("Gagal memuat data mutasi.", "error");
     } finally {
       setLoading(false);
     }
@@ -98,8 +101,9 @@ export const LaporanPage: React.FC = () => {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
+      showToast(`Berkas laporan ${format.toUpperCase()} berhasil diunduh.`, "success");
     } catch (err) {
-      alert("Gagal mengunduh file laporan.");
+      showToast("Gagal mengunduh berkas laporan.", "error");
     } finally {
       setDownloading(false);
     }
@@ -123,7 +127,7 @@ export const LaporanPage: React.FC = () => {
           <button
             onClick={() => handleExport("xlsx")}
             disabled={downloading || data.length === 0}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 px-3.5 py-2 text-xs font-semibold text-white hover:bg-emerald-800 transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed"
+            className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg bg-emerald-700 px-4 py-2.5 text-xs font-semibold text-white hover:bg-emerald-800 transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2"
           >
             <Download className="h-4 w-4" />
             <span>Ekspor Excel (.xlsx)</span>
@@ -131,7 +135,7 @@ export const LaporanPage: React.FC = () => {
           <button
             onClick={() => handleExport("csv")}
             disabled={downloading || data.length === 0}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
           >
             <Download className="h-4 w-4" />
             <span>Ekspor CSV</span>

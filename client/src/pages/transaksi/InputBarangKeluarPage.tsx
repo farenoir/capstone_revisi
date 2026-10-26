@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { apiClient } from "../../api/client";
 import { Barang, Divisi } from "../../types";
+import { useToast } from "../../components/common/Toast";
 import { Plus, Trash2, ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
 
 interface RowItem {
@@ -12,6 +13,7 @@ interface RowItem {
 
 export const InputBarangKeluarPage: React.FC = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [barangList, setBarangList] = useState<Barang[]>([]);
   const [divisiList, setDivisiList] = useState<Divisi[]>([]);
   const [loadingInitial, setLoadingInitial] = useState(true);
@@ -40,6 +42,7 @@ export const InputBarangKeluarPage: React.FC = () => {
         }
       } catch (err) {
         console.error(err);
+        showToast("Gagal memuat referensi divisi atau barang", "error");
       } finally {
         setLoadingInitial(false);
       }
@@ -62,11 +65,10 @@ export const InputBarangKeluarPage: React.FC = () => {
     setItems(updated);
   };
 
-  // Helper to check row stock validity
   const getRowStockStatus = (row: RowItem) => {
-    if (!row.id_barang) return { valid: true, max: 0, requested: row.jumlah };
+    if (!row.id_barang) return { valid: true, max: 0, requested: row.jumlah, nama: "", satuan: "" };
     const b = barangList.find((item) => item.id_barang.toString() === row.id_barang);
-    if (!b) return { valid: true, max: 0, requested: row.jumlah };
+    if (!b) return { valid: true, max: 0, requested: row.jumlah, nama: "", satuan: "" };
 
     const valid = row.jumlah > 0 && row.jumlah <= b.stok;
     return {
@@ -78,7 +80,6 @@ export const InputBarangKeluarPage: React.FC = () => {
     };
   };
 
-  // Check if entire form has stock validation issues
   const hasValidationErrors = items.some((row) => {
     if (!row.id_barang) return true;
     const status = getRowStockStatus(row);
@@ -94,7 +95,6 @@ export const InputBarangKeluarPage: React.FC = () => {
       return;
     }
 
-    // Client-side validation check
     for (let i = 0; i < items.length; i++) {
       const row = items[i];
       if (!row.id_barang) {
@@ -117,7 +117,7 @@ export const InputBarangKeluarPage: React.FC = () => {
     setSubmitting(true);
 
     try {
-      await apiClient.post("/transaksi/barang-keluar", {
+      const res = await apiClient.post("/transaksi/barang-keluar", {
         tanggal,
         id_divisi: Number(idDivisi),
         items: items.map((it) => ({
@@ -127,6 +127,7 @@ export const InputBarangKeluarPage: React.FC = () => {
         })),
       });
 
+      showToast(res.data.message || "Transaksi pengeluaran barang berhasil disimpan");
       navigate("/barang-keluar");
     } catch (err: any) {
       const errData = err.response?.data?.error;
@@ -161,8 +162,9 @@ export const InputBarangKeluarPage: React.FC = () => {
       <div className="flex items-center gap-3">
         <Link
           to="/barang-keluar"
-          className="rounded-lg p-2 text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition-colors"
+          className="rounded-lg p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition-colors focus:ring-2 focus:ring-indigo-600"
           title="Kembali ke Riwayat"
+          aria-label="Kembali ke Riwayat Barang Keluar"
         >
           <ArrowLeft className="h-5 w-5" />
         </Link>
@@ -199,7 +201,7 @@ export const InputBarangKeluarPage: React.FC = () => {
                 required
                 value={tanggal}
                 onChange={(e) => setTanggal(e.target.value)}
-                className="mt-1.5 block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                className="mt-1.5 block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
               />
             </div>
 
@@ -211,7 +213,7 @@ export const InputBarangKeluarPage: React.FC = () => {
                 required
                 value={idDivisi}
                 onChange={(e) => setIdDivisi(e.target.value)}
-                className="mt-1.5 block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                className="mt-1.5 block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
               >
                 <option value="">Pilih Divisi Penerima</option>
                 {divisiList.map((d) => (
@@ -226,7 +228,7 @@ export const InputBarangKeluarPage: React.FC = () => {
 
         {/* Dynamic Multi-Item Rows with Live Stock Validation */}
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <div>
               <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-700">
                 Daftar Barang Keluar (Multi-Item)
@@ -238,7 +240,7 @@ export const InputBarangKeluarPage: React.FC = () => {
             <button
               type="button"
               onClick={addRow}
-              className="inline-flex items-center gap-1 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-2 text-xs font-semibold text-indigo-700 hover:bg-indigo-100 transition-colors min-h-[44px] focus:ring-2 focus:ring-indigo-600"
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Baris</span>
@@ -283,7 +285,7 @@ export const InputBarangKeluarPage: React.FC = () => {
                       required
                       value={row.id_barang}
                       onChange={(e) => updateRow(idx, "id_barang", e.target.value)}
-                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
                     >
                       <option value="">-- Pilih Barang --</option>
                       {barangList.map((b) => (
@@ -304,7 +306,7 @@ export const InputBarangKeluarPage: React.FC = () => {
                       required
                       value={row.jumlah}
                       onChange={(e) => updateRow(idx, "jumlah", Number(e.target.value))}
-                      className={`w-full rounded-lg px-3 py-2 text-sm focus:outline-none ${
+                      className={`w-full rounded-lg px-3 py-2 text-sm min-h-[44px] focus:outline-none ${
                         isOverStock
                           ? "border-2 border-red-500 bg-red-50 text-red-900 font-bold focus:ring-red-500"
                           : "border border-slate-300 bg-white text-slate-900 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
@@ -326,7 +328,7 @@ export const InputBarangKeluarPage: React.FC = () => {
                       placeholder="Contoh: Operasional Divisi IT"
                       value={row.keterangan}
                       onChange={(e) => updateRow(idx, "keterangan", e.target.value)}
-                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
                     />
                   </div>
 
@@ -336,7 +338,8 @@ export const InputBarangKeluarPage: React.FC = () => {
                       disabled={items.length === 1}
                       onClick={() => removeRow(idx)}
                       title="Hapus baris"
-                      className="rounded-lg p-2 text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-400"
+                      aria-label={`Hapus baris barang ke-${idx + 1}`}
+                      className="rounded-lg p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-400 focus:ring-2 focus:ring-red-500"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -351,14 +354,14 @@ export const InputBarangKeluarPage: React.FC = () => {
         <div className="flex items-center justify-end gap-3">
           <Link
             to="/barang-keluar"
-            className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+            className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors min-h-[44px] flex items-center"
           >
             Batal
           </Link>
           <button
             type="submit"
             disabled={submitting || hasValidationErrors}
-            className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed min-h-[44px] focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
           >
             {submitting ? (
               <>

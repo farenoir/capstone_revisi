@@ -12,11 +12,13 @@ import { InputBarangMasukPage } from "./pages/transaksi/InputBarangMasukPage";
 import { BarangKeluarPage } from "./pages/transaksi/BarangKeluarPage";
 import { InputBarangKeluarPage } from "./pages/transaksi/InputBarangKeluarPage";
 import { LaporanPage } from "./pages/laporan/LaporanPage";
+import { ToastProvider } from "./components/common/Toast";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <ToastProvider>
+      <BrowserRouter>
+        <Routes>
         {/* Public Route */}
         <Route path="/login" element={<LoginPage />} />
 
@@ -60,5 +62,6 @@ export default function App() {
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </BrowserRouter>
+    </ToastProvider>
   );
 }

@@ -59,7 +59,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-indigo-200 hover:bg-indigo-900 md:hidden"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-white md:hidden"
             aria-label="Tutup menu navigasi"
           >
             <X className="h-5 w-5" />

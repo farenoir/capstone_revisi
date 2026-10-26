@@ -22,7 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
         <button
           onClick={onToggleSidebar}
           aria-label="Buka menu navigasi"
-          className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 md:hidden focus:ring-2 focus:ring-indigo-600"
+          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 md:hidden focus:outline-none focus:ring-2 focus:ring-indigo-600"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -53,7 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
         <button
           onClick={handleLogout}
           title="Keluar dari akun"
-          className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-red-50 hover:text-red-700 hover:border-red-200 transition-colors focus:ring-2 focus:ring-red-500"
+          className="flex min-h-[44px] items-center gap-1.5 rounded-lg border border-slate-200 px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-red-50 hover:text-red-700 hover:border-red-200 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
         >
           <LogOut className="h-4 w-4" />
           <span className="hidden sm:inline">Keluar</span>

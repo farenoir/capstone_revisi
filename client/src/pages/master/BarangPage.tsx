@@ -4,7 +4,9 @@ import { Barang, Kategori } from "../../types";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { EmptyState } from "../../components/common/EmptyState";
 import { Modal } from "../../components/common/Modal";
-import { Plus, Search, Edit2, Trash2, AlertCircle, Filter } from "lucide-react";
+import { ConfirmModal } from "../../components/common/ConfirmModal";
+import { useToast } from "../../components/common/Toast";
+import { Plus, Search, Edit2, Trash2, AlertCircle, Filter, X } from "lucide-react";
 import { useAuthStore } from "../../store/useAuthStore";
 
 export const BarangPage: React.FC = () => {
@@ -20,6 +22,10 @@ export const BarangPage: React.FC = () => {
   const [modalError, setModalError] = useState("");
   const [modalLoading, setModalLoading] = useState(false);
 
+  // Delete Confirm State
+  const [itemToDelete, setItemToDelete] = useState<Barang | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
   // Form State
   const [formData, setFormData] = useState({
     kode_barang: "",
@@ -32,6 +38,7 @@ export const BarangPage: React.FC = () => {
   });
 
   const { isAdmin } = useAuthStore();
+  const { showToast } = useToast();
 
   const fetchData = async () => {
     setLoading(true);
@@ -49,6 +56,7 @@ export const BarangPage: React.FC = () => {
       setKategoriList(kRes.data.data);
     } catch (err) {
       console.error(err);
+      showToast("Gagal memuat data barang", "error");
     } finally {
       setLoading(false);
     }
@@ -61,6 +69,11 @@ export const BarangPage: React.FC = () => {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     fetchData();
+  };
+
+  const handleClearSearch = () => {
+    setSearch("");
+    setTimeout(() => fetchData(), 0);
   };
 
   const openAddModal = () => {
@@ -108,6 +121,7 @@ export const BarangPage: React.FC = () => {
           stok_minimum: Number(formData.stok_minimum),
           lokasi: formData.lokasi.trim() || null,
         });
+        showToast(`Data barang '${formData.nama_barang}' berhasil diperbarui`);
       } else {
         await apiClient.post("/barang", {
           kode_barang: formData.kode_barang.trim(),
@@ -118,6 +132,7 @@ export const BarangPage: React.FC = () => {
           stok_minimum: Number(formData.stok_minimum),
           lokasi: formData.lokasi.trim() || null,
         });
+        showToast(`Barang baru '${formData.nama_barang}' berhasil ditambahkan`);
       }
       setIsModalOpen(false);
       fetchData();
@@ -130,19 +145,22 @@ export const BarangPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (item: Barang) => {
-    if (!window.confirm(`Apakah Anda yakin ingin menghapus '${item.nama_barang}'?`)) {
-      return;
-    }
-
+  const handleConfirmDelete = async () => {
+    if (!itemToDelete) return;
+    setDeleteLoading(true);
     try {
-      await apiClient.delete(`/barang/${item.id_barang}`);
+      await apiClient.delete(`/barang/${itemToDelete.id_barang}`);
+      showToast(`Barang '${itemToDelete.nama_barang}' berhasil dihapus`);
+      setItemToDelete(null);
       fetchData();
     } catch (err: any) {
-      alert(
+      showToast(
         err.response?.data?.error?.message ||
-          "Gagal menghapus barang karena terikat transaksi mutasi."
+          "Barang tidak dapat dihapus karena masih terkait riwayat transaksi mutasi.",
+        "error"
       );
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -159,7 +177,7 @@ export const BarangPage: React.FC = () => {
         {isAdmin() && (
           <button
             onClick={openAddModal}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-700 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-700 transition-colors min-h-[44px] focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
           >
             <Plus className="h-4 w-4" />
             <span>Tambah Barang</span>
@@ -176,8 +194,18 @@ export const BarangPage: React.FC = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari kode atau nama barang..."
-            className="w-full rounded-lg border border-slate-300 bg-white py-2 pl-10 pr-4 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+            className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-10 pr-10 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
           />
+          {search && (
+            <button
+              type="button"
+              onClick={handleClearSearch}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-600"
+              aria-label="Bersihkan pencarian"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
         </form>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -185,7 +213,7 @@ export const BarangPage: React.FC = () => {
           <select
             value={selectedKat}
             onChange={(e) => setSelectedKat(e.target.value)}
-            className="w-full sm:w-48 rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm text-slate-700 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+            className="w-full sm:w-52 rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm text-slate-700 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
           >
             <option value="">Semua Kategori</option>
             {kategoriList.map((k) => (
@@ -215,20 +243,20 @@ export const BarangPage: React.FC = () => {
             <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
               <thead className="bg-slate-50 text-xs font-medium uppercase tracking-wider text-slate-500">
                 <tr>
-                  <th className="px-6 py-3">Kode</th>
-                  <th className="px-6 py-3">Nama Barang</th>
-                  <th className="px-6 py-3">Kategori</th>
-                  <th className="px-6 py-3 text-right">Stok</th>
-                  <th className="px-6 py-3 text-right">Stok Min</th>
-                  <th className="px-6 py-3">Satuan</th>
-                  <th className="px-6 py-3">Lokasi Rak</th>
-                  <th className="px-6 py-3 text-center">Status</th>
-                  {isAdmin() && <th className="px-6 py-3 text-right">Aksi</th>}
+                  <th className="px-6 py-3.5">Kode</th>
+                  <th className="px-6 py-3.5">Nama Barang</th>
+                  <th className="px-6 py-3.5">Kategori</th>
+                  <th className="px-6 py-3.5 text-right">Stok</th>
+                  <th className="px-6 py-3.5 text-right">Stok Min</th>
+                  <th className="px-6 py-3.5">Satuan</th>
+                  <th className="px-6 py-3.5">Lokasi Rak</th>
+                  <th className="px-6 py-3.5 text-center">Status</th>
+                  {isAdmin() && <th className="px-6 py-3.5 text-right">Aksi</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 bg-white">
                 {barangList.map((item) => (
-                  <tr key={item.id_barang} className="hover:bg-slate-50/80">
+                  <tr key={item.id_barang} className="hover:bg-slate-50/80 transition-colors">
                     <td className="px-6 py-3.5 font-mono text-xs font-semibold text-slate-700">
                       {item.kode_barang}
                     </td>
@@ -259,18 +287,20 @@ export const BarangPage: React.FC = () => {
                     </td>
                     {isAdmin() && (
                       <td className="px-6 py-3.5 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => openEditModal(item)}
-                            title="Edit Barang"
-                            className="rounded p-1 text-slate-500 hover:bg-slate-100 hover:text-indigo-600 transition-colors"
+                            title={`Edit ${item.nama_barang}`}
+                            aria-label={`Edit ${item.nama_barang}`}
+                            className="rounded-lg p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-indigo-600 transition-colors focus:ring-2 focus:ring-indigo-600"
                           >
                             <Edit2 className="h-4 w-4" />
                           </button>
                           <button
-                            onClick={() => handleDelete(item)}
-                            title="Hapus Barang"
-                            className="rounded p-1 text-slate-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+                            onClick={() => setItemToDelete(item)}
+                            title={`Hapus ${item.nama_barang}`}
+                            aria-label={`Hapus ${item.nama_barang}`}
+                            className="rounded-lg p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-500 hover:bg-red-50 hover:text-red-600 transition-colors focus:ring-2 focus:ring-red-500"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -310,7 +340,7 @@ export const BarangPage: React.FC = () => {
                 value={formData.kode_barang}
                 onChange={(e) => setFormData({ ...formData, kode_barang: e.target.value })}
                 placeholder="Contoh: ATK-001"
-                className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
               />
             </div>
 
@@ -322,7 +352,7 @@ export const BarangPage: React.FC = () => {
                 required
                 value={formData.id_kategori}
                 onChange={(e) => setFormData({ ...formData, id_kategori: e.target.value })}
-                className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
               >
                 {kategoriList.map((k) => (
                   <option key={k.id_kategori} value={k.id_kategori}>
@@ -343,7 +373,7 @@ export const BarangPage: React.FC = () => {
               value={formData.nama_barang}
               onChange={(e) => setFormData({ ...formData, nama_barang: e.target.value })}
               placeholder="Contoh: Kertas HVS A4 80gr"
-              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
             />
           </div>
 
@@ -358,7 +388,7 @@ export const BarangPage: React.FC = () => {
                 value={formData.satuan}
                 onChange={(e) => setFormData({ ...formData, satuan: e.target.value })}
                 placeholder="Rim, Pcs, Box"
-                className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
               />
             </div>
 
@@ -373,7 +403,7 @@ export const BarangPage: React.FC = () => {
                   required
                   value={formData.stok}
                   onChange={(e) => setFormData({ ...formData, stok: Number(e.target.value) })}
-                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
                 />
               </div>
             )}
@@ -390,7 +420,7 @@ export const BarangPage: React.FC = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, stok_minimum: Number(e.target.value) })
                 }
-                className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
               />
             </div>
           </div>
@@ -404,7 +434,7 @@ export const BarangPage: React.FC = () => {
               value={formData.lokasi}
               onChange={(e) => setFormData({ ...formData, lokasi: e.target.value })}
               placeholder="Contoh: Rak A1, Lemari 2"
-              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
             />
           </div>
 
@@ -412,20 +442,31 @@ export const BarangPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="rounded-lg border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
+              className="rounded-lg border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors min-h-[44px]"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={modalLoading}
-              className="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-700 transition-colors disabled:bg-indigo-400"
+              className="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-700 transition-colors disabled:bg-indigo-400 min-h-[44px]"
             >
               {modalLoading ? "Menyimpan..." : "Simpan Data"}
             </button>
           </div>
         </form>
       </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={!!itemToDelete}
+        onClose={() => setItemToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        loading={deleteLoading}
+        title="Konfirmasi Hapus Barang"
+        message={`Apakah Anda yakin ingin menghapus barang '${itemToDelete?.nama_barang}' (${itemToDelete?.kode_barang})? Tindakan ini tidak dapat dibatalkan.`}
+        confirmText="Hapus Barang"
+      />
     </div>
   );
 };
