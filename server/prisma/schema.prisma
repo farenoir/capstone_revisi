@@ -78,17 +78,18 @@ model Barang {
 }
 
 model BarangMasuk {
-  id_masuk    Int      @id @default(autoincrement())
-  tanggal     DateTime @db.Date
-  id_barang   Int
-  jumlah      Int
-  id_supplier Int
-  id_user     Int
-  keterangan  String?  @db.VarChar(255)
-  created_at  DateTime @default(now())
-  barang      Barang   @relation(fields: [id_barang], references: [id_barang], onDelete: Restrict)
-  supplier    Supplier @relation(fields: [id_supplier], references: [id_supplier], onDelete: Restrict)
-  user        User     @relation(fields: [id_user], references: [id_user], onDelete: Restrict)
+  id_masuk     Int      @id @default(autoincrement())
+  tanggal      DateTime @db.Date
+  id_barang    Int
+  jumlah       Int
+  id_supplier  Int
+  id_user      Int
+  nama_petugas String?  @default("Budi Santoso") @db.VarChar(100)
+  keterangan   String?  @db.VarChar(255)
+  created_at   DateTime @default(now())
+  barang       Barang   @relation(fields: [id_barang], references: [id_barang], onDelete: Restrict)
+  supplier     Supplier @relation(fields: [id_supplier], references: [id_supplier], onDelete: Restrict)
+  user         User     @relation(fields: [id_user], references: [id_user], onDelete: Restrict)
 
   @@index([tanggal])
   @@index([id_barang])
@@ -98,17 +99,18 @@ model BarangMasuk {
 }
 
 model BarangKeluar {
-  id_keluar   Int      @id @default(autoincrement())
-  tanggal     DateTime @db.Date
-  id_barang   Int
-  jumlah      Int
-  id_divisi   Int
-  id_user     Int
-  keterangan  String?  @db.VarChar(255)
-  created_at  DateTime @default(now())
-  barang      Barang   @relation(fields: [id_barang], references: [id_barang], onDelete: Restrict)
-  divisi      Divisi   @relation(fields: [id_divisi], references: [id_divisi], onDelete: Restrict)
-  user        User     @relation(fields: [id_user], references: [id_user], onDelete: Restrict)
+  id_keluar      Int      @id @default(autoincrement())
+  tanggal        DateTime @db.Date
+  id_barang      Int
+  jumlah         Int
+  id_divisi      Int
+  id_user        Int
+  nama_pengambil String?  @default("Siti Rahmawati") @db.VarChar(100)
+  keterangan     String?  @db.VarChar(255)
+  created_at     DateTime @default(now())
+  barang         Barang   @relation(fields: [id_barang], references: [id_barang], onDelete: Restrict)
+  divisi         Divisi   @relation(fields: [id_divisi], references: [id_divisi], onDelete: Restrict)
+  user           User     @relation(fields: [id_user], references: [id_user], onDelete: Restrict)
 
   @@index([tanggal])
   @@index([id_barang])

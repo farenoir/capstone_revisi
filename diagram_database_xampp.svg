@@ -220,8 +220,8 @@
   </g>
 
   <!-- TABLE 4: barang_masuk -->
-  <g transform="translate(360, 510)" filter="url(#shadow)">
-    <rect width="280" height="226" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+  <g transform="translate(360, 490)" filter="url(#shadow)">
+    <rect width="280" height="252" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
     <path d="M 0 4 Q 0 0 4 0 L 276 0 Q 280 0 280 4 L 280 30 L 0 30 Z" fill="#dbe5ee"/>
     <line x1="0" y1="30" x2="280" y2="30" stroke="#94a3b8" stroke-width="1"/>
     <text x="10" y="20" font-size="12" fill="#475569">▦</text>
@@ -256,14 +256,19 @@
     <text x="26" y="172" font-size="12" font-weight="bold" fill="#1e40af" font-family="monospace">id_user</text>
     <text x="272" y="172" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
 
+    <rect x="1" y="180" width="278" height="24" fill="#f8fafc"/>
     <circle cx="14" cy="192" r="2" fill="#94a3b8"/>
-    <text x="26" y="196" font-size="12" fill="#1e293b" font-family="monospace">keterangan</text>
-    <text x="272" y="196" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(255)</text>
+    <text x="26" y="196" font-size="12" fill="#1e293b" font-family="monospace">nama_petugas</text>
+    <text x="272" y="196" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(100)</text>
 
-    <rect x="1" y="204" width="278" height="21" fill="#f8fafc"/>
-    <circle cx="14" cy="215" r="2" fill="#94a3b8"/>
-    <text x="26" y="219" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
-    <text x="272" y="219" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+    <circle cx="14" cy="216" r="2" fill="#94a3b8"/>
+    <text x="26" y="220" font-size="12" fill="#1e293b" font-family="monospace">keterangan</text>
+    <text x="272" y="220" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(255)</text>
+
+    <rect x="1" y="228" width="278" height="21" fill="#f8fafc"/>
+    <circle cx="14" cy="239" r="2" fill="#94a3b8"/>
+    <text x="26" y="243" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
+    <text x="272" y="243" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
   </g>
 
   <!-- TABLE 5: users -->
@@ -331,8 +336,8 @@
   </g>
 
   <!-- TABLE 7: barang_keluar -->
-  <g transform="translate(730, 110)" filter="url(#shadow)">
-    <rect width="280" height="226" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+  <g transform="translate(730, 95)" filter="url(#shadow)">
+    <rect width="280" height="252" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
     <path d="M 0 4 Q 0 0 4 0 L 276 0 Q 280 0 280 4 L 280 30 L 0 30 Z" fill="#dbe5ee"/>
     <line x1="0" y1="30" x2="280" y2="30" stroke="#94a3b8" stroke-width="1"/>
     <text x="10" y="20" font-size="12" fill="#475569">▦</text>
@@ -367,13 +372,18 @@
     <text x="26" y="172" font-size="12" font-weight="bold" fill="#1e40af" font-family="monospace">id_user</text>
     <text x="272" y="172" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">int(11)</text>
 
+    <rect x="1" y="180" width="278" height="24" fill="#f8fafc"/>
     <circle cx="14" cy="192" r="2" fill="#94a3b8"/>
-    <text x="26" y="196" font-size="12" fill="#1e293b" font-family="monospace">keterangan</text>
-    <text x="272" y="196" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(255)</text>
+    <text x="26" y="196" font-size="12" fill="#1e293b" font-family="monospace">nama_pengambil</text>
+    <text x="272" y="196" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(100)</text>
 
-    <rect x="1" y="204" width="278" height="21" fill="#f8fafc"/>
-    <circle cx="14" cy="215" r="2" fill="#94a3b8"/>
-    <text x="26" y="219" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
-    <text x="272" y="219" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
+    <circle cx="14" cy="216" r="2" fill="#94a3b8"/>
+    <text x="26" y="220" font-size="12" fill="#1e293b" font-family="monospace">keterangan</text>
+    <text x="272" y="220" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">varchar(255)</text>
+
+    <rect x="1" y="228" width="278" height="21" fill="#f8fafc"/>
+    <circle cx="14" cy="239" r="2" fill="#94a3b8"/>
+    <text x="26" y="243" font-size="12" fill="#1e293b" font-family="monospace">created_at</text>
+    <text x="272" y="243" font-size="11" fill="#64748b" text-anchor="end" font-family="monospace">datetime</text>
   </g>
 </svg>

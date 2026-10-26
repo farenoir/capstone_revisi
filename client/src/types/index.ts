@@ -58,6 +58,7 @@ export interface BarangMasukRecord {
   jumlah: number;
   id_supplier: number;
   id_user: number;
+  nama_petugas?: string | null;
   keterangan?: string | null;
   barang: {
     id_barang: number;
@@ -83,6 +84,7 @@ export interface BarangKeluarRecord {
   jumlah: number;
   id_divisi: number;
   id_user: number;
+  nama_pengambil?: string | null;
   keterangan?: string | null;
   barang: {
     id_barang: number;

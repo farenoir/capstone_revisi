@@ -54,7 +54,7 @@ export const getMutasiReportData = async (req: Request, res: Response, next: Nex
           kategori: m.barang.kategori.nama_kategori,
           jumlah: m.jumlah,
           satuan: m.barang.satuan,
-          petugas: m.user.nama,
+          petugas: m.nama_petugas ? `${m.nama_petugas} (${m.user.nama})` : m.user.nama,
           keterangan: m.keterangan || "-",
         }))
       );
@@ -88,7 +88,7 @@ export const getMutasiReportData = async (req: Request, res: Response, next: Nex
           kategori: k.barang.kategori.nama_kategori,
           jumlah: k.jumlah,
           satuan: k.barang.satuan,
-          petugas: k.user.nama,
+          petugas: k.nama_pengambil ? `${k.nama_pengambil} (${k.user.nama})` : k.user.nama,
           keterangan: k.keterangan || "-",
         }))
       );
@@ -354,7 +354,7 @@ export const exportReport = async (req: Request, res: Response, next: NextFuncti
           kategori: m.barang.kategori.nama_kategori,
           jumlah: m.jumlah,
           satuan: m.barang.satuan,
-          petugas: m.user.nama,
+          petugas: m.nama_petugas || m.user.nama,
           keterangan: m.keterangan || "-",
         }))
       );
@@ -386,7 +386,7 @@ export const exportReport = async (req: Request, res: Response, next: NextFuncti
           kategori: k.barang.kategori.nama_kategori,
           jumlah: k.jumlah,
           satuan: k.barang.satuan,
-          petugas: k.user.nama,
+          petugas: k.nama_pengambil || k.user.nama,
           keterangan: k.keterangan || "-",
         }))
       );

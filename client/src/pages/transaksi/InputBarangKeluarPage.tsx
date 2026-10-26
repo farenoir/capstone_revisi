@@ -21,6 +21,7 @@ export const InputBarangKeluarPage: React.FC = () => {
   // Form State
   const [tanggal, setTanggal] = useState(new Date().toISOString().split("T")[0]);
   const [idDivisi, setIdDivisi] = useState("");
+  const [namaPengambil, setNamaPengambil] = useState("Siti Rahmawati");
   const [items, setItems] = useState<RowItem[]>([
     { id_barang: "", jumlah: 1, keterangan: "" },
   ]);
@@ -120,6 +121,7 @@ export const InputBarangKeluarPage: React.FC = () => {
       const res = await apiClient.post("/transaksi/barang-keluar", {
         tanggal,
         id_divisi: Number(idDivisi),
+        nama_pengambil: namaPengambil.trim() || "Siti Rahmawati",
         items: items.map((it) => ({
           id_barang: Number(it.id_barang),
           jumlah: Number(it.jumlah),
@@ -191,7 +193,7 @@ export const InputBarangKeluarPage: React.FC = () => {
           <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-700 mb-4">
             Informasi Dokumen Pengeluaran
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
                 Tanggal Pengeluaran
@@ -222,6 +224,20 @@ export const InputBarangKeluarPage: React.FC = () => {
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                Nama Yang Mengambil Barang
+              </label>
+              <input
+                type="text"
+                required
+                value={namaPengambil}
+                onChange={(e) => setNamaPengambil(e.target.value)}
+                placeholder="Contoh: Siti Rahmawati / Riyan Dika"
+                className="mt-1.5 block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
+              />
             </div>
           </div>
         </div>

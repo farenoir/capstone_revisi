@@ -140,6 +140,7 @@ export const BarangKeluarPage: React.FC = () => {
                   <th className="px-6 py-3">No. Dokumen</th>
                   <th className="px-6 py-3">Tanggal</th>
                   <th className="px-6 py-3">Divisi Penerima</th>
+                  <th className="px-6 py-3">Nama Pengambil</th>
                   <th className="px-6 py-3">Barang ATK</th>
                   <th className="px-6 py-3 text-right">Jumlah Keluar</th>
                   <th className="px-6 py-3">Petugas Pencatat</th>
@@ -157,6 +158,11 @@ export const BarangKeluarPage: React.FC = () => {
                     </td>
                     <td className="px-6 py-3.5 font-medium text-slate-900">
                       {rec.divisi.nama_divisi}
+                    </td>
+                    <td className="px-6 py-3.5 font-medium text-slate-800">
+                      <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 border border-blue-200 px-2.5 py-1 text-xs font-semibold text-blue-800">
+                        {rec.nama_pengambil || "Siti Rahmawati"}
+                      </span>
                     </td>
                     <td className="px-6 py-3.5">
                       <div className="font-medium text-slate-900">{rec.barang.nama_barang}</div>

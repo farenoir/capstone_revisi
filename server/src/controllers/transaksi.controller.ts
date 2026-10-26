@@ -26,7 +26,7 @@ export class InsufficientStockError extends Error {
 export const createBarangMasuk = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user!.id_user;
-    const { tanggal, id_supplier, items } = req.body;
+    const { tanggal, id_supplier, nama_petugas, items } = req.body;
 
     // Verify supplier exists
     const supplier = await prisma.supplier.findUnique({
@@ -70,6 +70,7 @@ export const createBarangMasuk = async (req: Request, res: Response, next: NextF
             jumlah,
             id_supplier: Number(id_supplier),
             id_user: userId,
+            nama_petugas: nama_petugas?.trim() || "Budi Santoso",
             keterangan: item.keterangan || null,
           },
           include: {
@@ -168,7 +169,7 @@ export const getBarangMasukList = async (req: Request, res: Response, next: Next
 export const createBarangKeluar = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user!.id_user;
-    const { tanggal, id_divisi, items } = req.body;
+    const { tanggal, id_divisi, nama_pengambil, items } = req.body;
 
     // Verify divisi exists
     const divisi = await prisma.divisi.findUnique({
@@ -219,6 +220,7 @@ export const createBarangKeluar = async (req: Request, res: Response, next: Next
               jumlah,
               id_divisi: Number(id_divisi),
               id_user: userId,
+              nama_pengambil: nama_pengambil?.trim() || "Siti Rahmawati",
               keterangan: item.keterangan || null,
             },
             include: {
