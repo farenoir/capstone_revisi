@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { apiClient } from "../../api/client";
 import { BarangKeluarRecord, Divisi } from "../../types";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
@@ -18,6 +18,7 @@ export const BarangKeluarPage: React.FC = () => {
   const [endDate, setEndDate] = useState("");
 
   const { isAdmin } = useAuthStore();
+  const navigate = useNavigate();
 
   const fetchRecords = async () => {
     setLoading(true);
@@ -60,7 +61,7 @@ export const BarangKeluarPage: React.FC = () => {
         {isAdmin() && (
           <Link
             to="/barang-keluar/baru"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-4 py-2 text-xs font-semibold text-white hover:bg-red-700 transition-colors"
+            className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg bg-red-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
           >
             <Plus className="h-4 w-4" />
             <span>Input Transaksi Keluar</span>
@@ -110,7 +111,7 @@ export const BarangKeluarPage: React.FC = () => {
               setStartDate("");
               setEndDate("");
             }}
-            className="text-xs text-slate-500 hover:text-slate-800 underline ml-auto"
+            className="min-h-[44px] flex items-center text-xs text-slate-500 hover:text-slate-800 underline ml-auto px-2 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-lg"
           >
             Reset Filter
           </button>
@@ -127,9 +128,7 @@ export const BarangKeluarPage: React.FC = () => {
               title="Belum Ada Transaksi Keluar"
               description="Catat pengeluaran barang ATK ke divisi kantor untuk memotong stok fisik."
               actionText={isAdmin() ? "Input Transaksi Keluar" : undefined}
-              onAction={
-                isAdmin() ? () => (window.location.href = "/barang-keluar/baru") : undefined
-              }
+              onAction={isAdmin() ? () => navigate("/barang-keluar/baru") : undefined}
               icon={<ArrowUpFromLine className="h-6 w-6 text-red-600" />}
             />
           </div>
