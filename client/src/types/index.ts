@@ -35,6 +35,8 @@ export interface Barang {
   satuan: string;
   stok: number;
   stok_minimum: number;
+  harga_satuan?: number;
+  expired_date?: string | null;
   lokasi?: string | null;
   kategori: {
     id_kategori: number;
@@ -120,6 +122,7 @@ export interface LowStockItem {
   stok_minimum: number;
   satuan: string;
   lokasi: string;
+  expired_date?: string | null;
   status: string;
 }
 

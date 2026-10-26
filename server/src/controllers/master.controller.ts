@@ -78,7 +78,17 @@ export const getBarangById = async (req: Request, res: Response, next: NextFunct
 
 export const createBarang = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { kode_barang, nama_barang, id_kategori, satuan, stok, stok_minimum, lokasi } = req.body;
+    const {
+      kode_barang,
+      nama_barang,
+      id_kategori,
+      satuan,
+      stok,
+      stok_minimum,
+      harga_satuan,
+      expired_date,
+      lokasi,
+    } = req.body;
 
     const existing = await prisma.barang.findUnique({
       where: { kode_barang },
@@ -96,6 +106,8 @@ export const createBarang = async (req: Request, res: Response, next: NextFuncti
         satuan,
         stok: Number(stok) || 0,
         stok_minimum: Number(stok_minimum) || 0,
+        harga_satuan: Number(harga_satuan) || 0,
+        expired_date: expired_date ? new Date(expired_date) : null,
         lokasi: lokasi || null,
       },
       include: {
@@ -112,7 +124,16 @@ export const createBarang = async (req: Request, res: Response, next: NextFuncti
 export const updateBarang = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id);
-    const { kode_barang, nama_barang, id_kategori, satuan, stok_minimum, lokasi } = req.body;
+    const {
+      kode_barang,
+      nama_barang,
+      id_kategori,
+      satuan,
+      stok_minimum,
+      harga_satuan,
+      expired_date,
+      lokasi,
+    } = req.body;
 
     if (kode_barang) {
       const existing = await prisma.barang.findFirst({
@@ -134,6 +155,10 @@ export const updateBarang = async (req: Request, res: Response, next: NextFuncti
         ...(id_kategori && { id_kategori: Number(id_kategori) }),
         ...(satuan && { satuan }),
         ...(stok_minimum !== undefined && { stok_minimum: Number(stok_minimum) }),
+        ...(harga_satuan !== undefined && { harga_satuan: Number(harga_satuan) }),
+        ...(expired_date !== undefined && {
+          expired_date: expired_date ? new Date(expired_date) : null,
+        }),
         ...(lokasi !== undefined && { lokasi }),
       },
       include: {

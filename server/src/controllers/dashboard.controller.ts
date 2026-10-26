@@ -107,6 +107,7 @@ export const getLowStockAlerts = async (_req: Request, res: Response, next: Next
         stok_minimum: b.stok_minimum,
         satuan: b.satuan,
         lokasi: b.lokasi || "-",
+        expired_date: b.expired_date ? b.expired_date.toISOString().split("T")[0] : null,
         status: b.stok === 0 ? "Habis" : "Menipis",
       }));
 

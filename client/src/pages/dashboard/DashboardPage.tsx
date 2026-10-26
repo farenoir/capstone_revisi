@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   ArrowRight,
   TrendingUp,
+  Calendar,
 } from "lucide-react";
 import { useAuthStore } from "../../store/useAuthStore";
 
@@ -238,6 +239,7 @@ export const DashboardPage: React.FC = () => {
                   <th className="px-6 py-3">Kategori</th>
                   <th className="px-6 py-3 text-right">Sisa Stok</th>
                   <th className="px-6 py-3 text-right">Stok Min</th>
+                  <th className="px-6 py-3">Expired Date</th>
                   <th className="px-6 py-3">Lokasi</th>
                   <th className="px-6 py-3 text-center">Status</th>
                   {isAdmin() && <th className="px-6 py-3 text-right">Aksi</th>}
@@ -256,6 +258,16 @@ export const DashboardPage: React.FC = () => {
                     </td>
                     <td className="px-6 py-3.5 text-right text-slate-600 tabular-nums">
                       {item.stok_minimum} {item.satuan}
+                    </td>
+                    <td className="px-6 py-3.5">
+                      {item.expired_date ? (
+                        <span className="inline-flex items-center gap-1 font-mono text-xs font-medium text-amber-900 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md">
+                          <Calendar className="h-3 w-3 text-amber-600" />
+                          {new Date(item.expired_date).toISOString().split("T")[0]}
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 text-xs">-</span>
+                      )}
                     </td>
                     <td className="px-6 py-3.5 text-slate-500">{item.lokasi}</td>
                     <td className="px-6 py-3.5 text-center">

@@ -63,6 +63,8 @@ model Barang {
   satuan        String         @db.VarChar(30)
   stok          Int            @default(0)
   stok_minimum  Int            @default(0)
+  harga_satuan  Int            @default(0)
+  expired_date  DateTime?      @db.Date
   lokasi        String?        @db.VarChar(100)
   created_at    DateTime       @default(now())
   updated_at    DateTime       @updatedAt

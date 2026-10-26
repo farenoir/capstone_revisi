@@ -8,6 +8,8 @@ export const barangCreateSchema = z.object({
     satuan: z.string().trim().min(1, "Satuan wajib diisi").max(30),
     stok: z.coerce.number().int().min(0, "Stok awal minimal 0").default(0),
     stok_minimum: z.coerce.number().int().min(0, "Stok minimum minimal 0").default(0),
+    harga_satuan: z.coerce.number().int().min(0, "Harga satuan minimal 0").default(0),
+    expired_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Format tanggal kedaluwarsa harus YYYY-MM-DD").optional().nullable(),
     lokasi: z.string().trim().max(100).optional().nullable(),
   }),
 });
@@ -22,6 +24,8 @@ export const barangUpdateSchema = z.object({
     id_kategori: z.coerce.number().int().positive().optional(),
     satuan: z.string().trim().min(1).max(30).optional(),
     stok_minimum: z.coerce.number().int().min(0).optional(),
+    harga_satuan: z.coerce.number().int().min(0).optional(),
+    expired_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Format tanggal kedaluwarsa harus YYYY-MM-DD").optional().nullable(),
     lokasi: z.string().trim().max(100).optional().nullable(),
   }),
 });

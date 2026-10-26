@@ -6,7 +6,7 @@ import { EmptyState } from "../../components/common/EmptyState";
 import { Modal } from "../../components/common/Modal";
 import { ConfirmModal } from "../../components/common/ConfirmModal";
 import { useToast } from "../../components/common/Toast";
-import { Plus, Search, Edit2, Trash2, AlertCircle, Filter, X } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, AlertCircle, Filter, X, Calendar } from "lucide-react";
 import { useAuthStore } from "../../store/useAuthStore";
 
 export const BarangPage: React.FC = () => {
@@ -34,6 +34,8 @@ export const BarangPage: React.FC = () => {
     satuan: "",
     stok: 0,
     stok_minimum: 0,
+    harga_satuan: 0,
+    expired_date: "",
     lokasi: "",
   });
 
@@ -82,9 +84,11 @@ export const BarangPage: React.FC = () => {
       kode_barang: "",
       nama_barang: "",
       id_kategori: kategoriList[0]?.id_kategori.toString() || "",
-      satuan: "Pcs",
+      satuan: "pcs",
       stok: 0,
       stok_minimum: 5,
+      harga_satuan: 0,
+      expired_date: "",
       lokasi: "",
     });
     setModalError("");
@@ -100,6 +104,8 @@ export const BarangPage: React.FC = () => {
       satuan: item.satuan,
       stok: item.stok,
       stok_minimum: item.stok_minimum,
+      harga_satuan: item.harga_satuan || 0,
+      expired_date: item.expired_date ? item.expired_date.split("T")[0] : "",
       lokasi: item.lokasi || "",
     });
     setModalError("");
@@ -119,6 +125,8 @@ export const BarangPage: React.FC = () => {
           id_kategori: Number(formData.id_kategori),
           satuan: formData.satuan.trim(),
           stok_minimum: Number(formData.stok_minimum),
+          harga_satuan: Number(formData.harga_satuan) || 0,
+          expired_date: formData.expired_date || null,
           lokasi: formData.lokasi.trim() || null,
         });
         showToast(`Data barang '${formData.nama_barang}' berhasil diperbarui`);
@@ -130,6 +138,8 @@ export const BarangPage: React.FC = () => {
           satuan: formData.satuan.trim(),
           stok: Number(formData.stok),
           stok_minimum: Number(formData.stok_minimum),
+          harga_satuan: Number(formData.harga_satuan) || 0,
+          expired_date: formData.expired_date || null,
           lokasi: formData.lokasi.trim() || null,
         });
         showToast(`Barang baru '${formData.nama_barang}' berhasil ditambahkan`);
@@ -249,6 +259,7 @@ export const BarangPage: React.FC = () => {
                   <th className="px-6 py-3.5 text-right">Stok</th>
                   <th className="px-6 py-3.5 text-right">Stok Min</th>
                   <th className="px-6 py-3.5">Satuan</th>
+                  <th className="px-6 py-3.5">Expired Date</th>
                   <th className="px-6 py-3.5">Lokasi Rak</th>
                   <th className="px-6 py-3.5 text-center">Status</th>
                   {isAdmin() && <th className="px-6 py-3.5 text-right">Aksi</th>}
@@ -273,6 +284,16 @@ export const BarangPage: React.FC = () => {
                       {item.stok_minimum}
                     </td>
                     <td className="px-6 py-3.5 text-slate-600">{item.satuan}</td>
+                    <td className="px-6 py-3.5">
+                      {item.expired_date ? (
+                        <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-amber-900 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-md">
+                          <Calendar className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+                          <span>{new Date(item.expired_date).toISOString().split("T")[0]}</span>
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 text-xs">-</span>
+                      )}
+                    </td>
                     <td className="px-6 py-3.5 text-slate-500">{item.lokasi || "-"}</td>
                     <td className="px-6 py-3.5 text-center">
                       <span
@@ -387,7 +408,7 @@ export const BarangPage: React.FC = () => {
                 required
                 value={formData.satuan}
                 onChange={(e) => setFormData({ ...formData, satuan: e.target.value })}
-                placeholder="Rim, Pcs, Box"
+                placeholder="pcs, rim, pak, botol"
                 className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
               />
             </div>
@@ -420,6 +441,36 @@ export const BarangPage: React.FC = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, stok_minimum: Number(e.target.value) })
                 }
+                className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                Harga Satuan (Rp)
+              </label>
+              <input
+                type="number"
+                min="0"
+                value={formData.harga_satuan}
+                onChange={(e) =>
+                  setFormData({ ...formData, harga_satuan: Number(e.target.value) })
+                }
+                placeholder="Contoh: 3000"
+                className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                Expired Date (Kedaluwarsa)
+              </label>
+              <input
+                type="date"
+                value={formData.expired_date}
+                onChange={(e) => setFormData({ ...formData, expired_date: e.target.value })}
                 className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 min-h-[44px]"
               />
             </div>
